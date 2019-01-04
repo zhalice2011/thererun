@@ -1,8 +1,16 @@
-const router = require('koa-router')()
+module.exports = function (app) {
+  app.get('/', function (req, res) {
+    res.redirect('/posts');
+  });
+  app.use('/signup', require('./signup'));
+  app.use('/signin', require('./signin'));
+  app.use('/signout', require('./signout'));
+  app.use('/posts', require('./posts'));
 
-router.get('/', async (ctx, next) => {
-  await ctx.render('index', {
-    title: 'Hello dali!'
-  })
-})
-module.exports = router
+  // 404 page
+  app.use(function (req, res) {
+    if (!res.headersSent) {
+      res.status(404).render('404');
+    }
+  });
+};
